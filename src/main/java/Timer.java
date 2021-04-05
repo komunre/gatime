@@ -6,10 +6,12 @@ public class Timer {
     private long sec = 0;
     private long nano = 0;
     private double elapsed = 0;
+    boolean started = false;
     public void start(){
         Instant instant = clock.instant();
         sec = instant.getEpochSecond();
         nano = instant.getNano();
+        started = true;
     }
 
     public void update(){

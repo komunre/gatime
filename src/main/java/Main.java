@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 
 public class Main  {
@@ -10,7 +12,7 @@ public class Main  {
     }
 }
 
-class GaTime extends Frame implements ActionListener{
+class GaTime extends Frame implements ActionListener, KeyListener {
     Button start, stop;
     public TextField time;
     boolean timing = false;
@@ -36,13 +38,18 @@ class GaTime extends Frame implements ActionListener{
 
         Thread thread = new Thread(() -> {
             Timer timer = new Timer();
-            timer.start();
             while (true){
                 System.out.println("Updating");
                 if (timing){
+                    if (!timer.started){
+                        timer.start();
+                    }
                     timer.update();
                     DecimalFormat df_obj = new DecimalFormat("#.##");
                     time.setText(String.valueOf(df_obj.format(timer.getTime())));
+                }
+                else{
+                    timer.started = false;
                 }
                 try {
                     Thread.sleep(0, 100);
@@ -64,5 +71,25 @@ class GaTime extends Frame implements ActionListener{
             timing = false;
         }
         System.out.println(timing);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_NUMPAD9){
+            timing = true;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_NUMPAD3){
+            timing = false;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }
